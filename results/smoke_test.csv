@@ -1,0 +1,5 @@
+n,distribution,tree_lookup_ns,model_lookup_ns,tree_build_peak_bytes,model_build_peak_bytes,tree_insert_ns,model_insert_ns,max_model_error,queries,updates
+100,uniform,197.8,301.8,6128,5616,1435.3,35432.3,5.09,200,3
+1000,uniform,214.0,374.4,54984,42352,1572.3,299320.0,18.52,200,3
+100,skewed,171.5,330.6,4648,5552,1181.7,32815.3,36.31,200,3
+1000,skewed,230.4,414.4,53424,42336,1509.0,405961.3,1128.99,200,3
