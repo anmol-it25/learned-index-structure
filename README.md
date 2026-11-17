@@ -1,27 +1,107 @@
-# Group 3: B+ Tree vs Learned Index
+# Learned Index vs B+ Tree
 
-Educational Python benchmark of a B+ Tree and a linear least-squares rank predictor with exact local correction.
+### Can Machine Learning Models Replace B+ Trees for Lookups?
 
-## Run
+This project explores whether a machine learning-based index can be an alternative to a traditional B+ Tree for searching data.
 
-```bash
-python3 src/benchmark.py --sizes 1000 10000 50000 --lookups 2000 --updates 10
+We implemented two indexing approaches in Python:
+
+- **B+ Tree:** A traditional tree-based indexing structure.
+- **Learned Index:** Uses linear regression to predict where a key is located, followed by binary search to find its exact position.
+
+The goal is to compare their lookup performance, memory usage, and insertion overhead across different dataset sizes and distributions.
+
+## Project Structure
+
+```text
+learned-index-structure/
+├── src/
+│   ├── indexes.py
+│   ├── benchmark.py
+│   └── test_correctness.py
+├── results/
+│   ├── measurements.csv
+│   ├── final_run_1.csv
+│   ├── final_run_2.csv
+│   ├── final_run_3.csv
+│   └── benchmark_summary.csv
+├── graphs/
+│   ├── lookup_time.png
+│   ├── insertion_time.png
+│   ├── build_peak_memory.png
+│   └── prediction_error.png
+├── analyze_results.py
+├── verify.py
+└── README.md
 ```
 
-Outputs `results/measurements.csv`. Requires Python 3.10+; no external packages.
+## Getting Started
 
-## Methodology
+**Requirements:** Python 3.9+ and Matplotlib (for generating graphs).
 
-- Unique sorted integer keys, uniformly sampled or exponentially skewed.
-- Both indexes return the exact zero-based sorted rank or -1.
-- Half of lookup queries are present keys; half are absent.
-- Five repetitions of lookup timing; report median nanoseconds per query.
-- `tracemalloc` peak allocations during construction are reported as a **proxy**, not precise retained index memory.
-- Insertions are appended above the largest key so B+ Tree ranks stay valid. The learned model is refitted after every insertion; this is a simple baseline, not an optimized dynamic learned index.
-- Dataset generation, Python interpreter overhead, cache effects, and index representation affect outcomes. This is not a comparison of production disk-backed indexes.
+Clone the repository:
 
-## Important caveats
+```bash
+git clone https://github.com/anmol-it25/learned-index-structure.git
+cd learned-index-structure
+```
 
-A single global linear model may have large correction windows on skewed data. Its correction search uses Python's optimized `bisect_left`, whereas the B+ Tree traversal is pure Python. Report this implementation asymmetry in the paper. Model prediction plus correction is exact for present keys. For absent keys, a restricted correction window is safe for nonmembership because sorted present keys with that value do not exist.
+Run the benchmark:
 
-For a more accurate memory comparison, measure retained object graphs separately with a dedicated profiler.
+```bash
+python3 src/benchmark.py --sizes 1000 10000 50000 100000 --lookups 5000 --updates 10
+```
+
+This saves the measurements to `results/measurements.csv`.
+
+Verify lookup correctness:
+
+```bash
+python3 src/test_correctness.py
+```
+
+Generate graphs:
+
+```bash
+python3 -m pip install matplotlib
+python3 analyze_results.py
+```
+
+The graphs are saved in `graphs/`, and the summary table is saved in `results/benchmark_summary.csv`.
+
+## Experiments
+
+We tested both indexes using:
+
+- Uniform and skewed datasets
+- Dataset sizes from 1,000 to 100,000 keys
+- 5,000 lookup queries per configuration
+- Three complete benchmark runs
+
+The experiments measure lookup time, insertion time, peak memory allocation during construction, and prediction error.
+
+## Results
+
+The B+ Tree achieved faster lookups across all tested configurations, while the Learned Index showed lower peak memory allocation during construction.
+
+The learned model also had higher insertion overhead because it is refitted after each insertion.
+
+![Lookup Performance](graphs/lookup_time.png)
+
+The full measurements and additional comparison graphs are available in the `results/` and `graphs/` folders.
+
+## Notes
+
+This is an educational Python implementation, not a production database benchmark.
+
+The learned index uses an optimized binary-search correction, while the B+ Tree is implemented in Python. This difference, along with Python overhead and in-memory testing, should be considered when interpreting the results.
+
+The memory measurements represent peak allocations during construction, not exact retained index memory.
+
+## Reference
+
+Kraska et al. (2018), *The Case for Learned Index Structures*, SIGMOD.
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
