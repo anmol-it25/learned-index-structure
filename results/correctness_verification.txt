@@ -1,34 +1,27 @@
-LEARNED INDEX VS B+ TREE
-LOOKUP CORRECTNESS VERIFICATION
-========================================
 
-Dataset size: 100,000 keys
-Implementations:
-- B+ Tree
-- Linear Regression Learned Index
-
-TEST 1: UNIFORM DISTRIBUTION
-----------------------------------------
-Existing keys passed: 100000
-Missing keys passed: 95008
+==================================================
+TESTING: UNIFORM
+Dataset size: 100,000
+==================================================
+Existing keys passed: 100,000
+Missing keys passed: 95,008
 Maximum model error: 186.39
-Result: PASS
+PASS: UNIFORM
 
-TEST 2: SKEWED DISTRIBUTION
-----------------------------------------
-Existing keys passed: 100000
-Missing keys passed: 77047
+==================================================
+TESTING: SKEWED
+Dataset size: 100,000
+==================================================
+Existing keys passed: 100,000
+Missing keys passed: 77,047
 Maximum model error: 242510.79
-Result: PASS
+PASS: SKEWED
 
-SUMMARY
-----------------------------------------
-Total existing keys tested: 200000
-Total missing keys tested: 172055
-Total test keys: 372055
-
-Both indexing implementations returned
-correct results for all tested keys.
-
+==================================================
+FINAL VERIFICATION SUMMARY
+==================================================
+Total existing keys tested: 200,000
+Total missing keys tested: 172,055
+Total test keys: 372,055
+Both indexes passed all lookup checks.
 FINAL RESULT: ALL TESTS PASSED
-========================================
